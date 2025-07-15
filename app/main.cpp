@@ -6,12 +6,12 @@
 #include "../net/include/Initialisers.hpp"
 #include "../net/include/DenseLayer.hpp"
 #include "../net/include/Network.hpp"
+#include "../net/include/Types.hpp"
 
-using Vec = std::vector<double>;
 
 
-std::vector<Vec> grid(int n=200){
-    std::vector<Vec> g; g.reserve(n*n);
+Mat grid(int n=200){
+    Mat g; g.reserve(n*n);
     double step=1.0/(n-1);
     for(int i=0;i<n;++i) for(int j=0;j<n;++j) g.push_back({i*step,j*step});
     return g;
@@ -19,15 +19,17 @@ std::vector<Vec> grid(int n=200){
 
 int main(){
     Network net;
-    auto& l1 = net.add<DenseLayer>(2,3, act::tanh, act::tanh_prime);
-    auto& l2 = net.add<DenseLayer>(3,1, act::sigmoid, act::sigmoid_prime);
+    auto& l1 = net.add<DenseLayer>(2,3, act::relu, act::relu_prime);
+    // auto& l2 = net.add<DenseLayer>(3,3, act::relu, act::relu_prime);
+    auto& l3 = net.add<DenseLayer>(3,1, act::sigmoid, act::sigmoid_prime);
 
-    std::mt19937 gen(std::random_device{}());
+    
     xavier(l1.W, l1.b, 2, 3, 2025);
-    xavier(l2.W, l2.b, 3, 1, 2025);
+    // he_normal(l2.W, l2.b, 3, 3, 2025);
+    xavier(l3.W, l3.b, 3, 1, 2025);
 
-    std::vector<Vec> X{{0,0},{0,1},{1,0},{1,1}};
-    std::vector<Vec> Y{{0},{1},{1},{0}};
+    Mat X{{0,0},{0,1},{1,0},{1,1}};
+    Mat Y{{0},{1},{1},{0}};
 
     double lr = 0.01;
     int batch = 1'000'000;
