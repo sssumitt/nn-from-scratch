@@ -1,8 +1,6 @@
 #pragma once
 #include <vector>
-
-using Vec   = std::vector<double>;
-using Mat   = std::vector<Vec>;
+#include "Types.hpp"
 
 struct Layer {
     virtual const Vec& forward (const Vec& x)                           = 0;
@@ -14,5 +12,6 @@ struct Layer {
                                        const Vec& dZ,
                                        double lr)                        = 0;
     virtual const Mat& weights()  const = 0;
+    virtual const Vec& activation() const = 0;
     virtual ~Layer() = default;
 };

@@ -2,8 +2,7 @@
 #include <vector>
 #include <algorithm>
 #include <cmath>
-
-using Vec = std::vector<double>;
+#include "Types.hpp"
 
 namespace loss {
 inline double binary_cross_entropy(const Vec& y_hat, const Vec& y) {

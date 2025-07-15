@@ -2,17 +2,14 @@
 #include <random>
 #include <vector>
 #include <cmath>
+#include "Types.hpp"
 
-// ──────────────────────────────────────────────────────────────
-// Pass a seed once; the helper creates its own mt19937 so the
-// API stays simple.  If you’d rather share an RNG, keep the old
-// overload that takes std::mt19937&.
-// ──────────────────────────────────────────────────────────────
-inline void xavier(std::vector<std::vector<double>>& W,
-                   std::vector<double>&              b,
-                   int                               fan_in,
-                   int                               fan_out,
-                   unsigned int                      seed = 42)   // ← reproducibility
+
+inline void xavier(Mat& W,
+                   Vec& b,
+                   int fan_in,
+                   int fan_out,
+                   unsigned int seed = 42)   // ← reproducibility
 {
     std::mt19937 gen(seed);                       // same stream every run
     double lim = std::sqrt(6.0 / (fan_in + fan_out));
@@ -23,3 +20,21 @@ inline void xavier(std::vector<std::vector<double>>& W,
 
     std::fill(b.begin(), b.end(), 0.0);
 }
+
+inline void he_normal(Mat& W,
+                      Vec& b,
+                      int fan_in,
+                      int fan_out,
+                      unsigned seed = 42)
+{
+    std::mt19937 gen(seed);
+    double stddev = std::sqrt(2.0 / fan_in);
+    std::normal_distribution<> dist(0.0, stddev);
+
+    for (auto& row : W)
+        for (auto& w : row)
+            w = dist(gen);
+
+    std::fill(b.begin(), b.end(), 0.0);
+}
+

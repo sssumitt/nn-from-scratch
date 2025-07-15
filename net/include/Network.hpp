@@ -21,9 +21,10 @@ public:
     // one-step SGD
     void backward(const Vec& input, const Vec& dE, double lr) {
         Vec dZ = dE;
-        for (int i = int(layers_.size()) - 1; i >= 0; --i) {
-            const Vec& prev = (i == 0) ? input : layers_[i-1]->forward(input); // cached A already
-            if (i == int(layers_.size()) - 1)
+        int lastSize = layers_.size();
+        for (int i = lastSize - 1; i >= 0; --i) {
+            const Vec& prev = (i == 0) ? input : layers_[i-1]->activation(); // cached A already
+            if (i == lastSize - 1)
                 layers_[i]->backward_output(prev, dZ, lr);
             else
                 dZ = layers_[i]->backward(prev, layers_[i+1]->weights(), dZ, lr);

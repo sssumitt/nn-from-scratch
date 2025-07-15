@@ -2,6 +2,7 @@
 #include "Layer.hpp"
 #include <functional>
 
+
 struct DenseLayer : Layer {
     Mat  W;
     Vec  b, Z, A;
@@ -52,4 +53,6 @@ struct DenseLayer : Layer {
     }
 
     const Mat& weights() const override { return W; }
+    const Vec& activation() const override { return A; }
+
 };
